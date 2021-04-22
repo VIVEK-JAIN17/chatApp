@@ -5,11 +5,26 @@ const router = require('./router');
 
 const app = express();
 const server = http.createServer(app);
-const io = socketio(server);
+const io = socketio(server, {
+    cors: {
+        origin: "http://localhost:3000",
+        methods: ["GET", "POST"]
+    }
+});
 
-io.on('conection', (socket) => {
+io.on('connection', (socket) => {
     console.log('we have a new connection !!');
-    socket.on('discnnect', () => console.log('user has left !!'));
+
+    socket.on('join', ({ name, room }, sendBakcToFront) => {
+        console.log(`${name} has joined room ${room}`)
+
+        const error = true;
+        if (error) {
+            sendBakcToFront({ error: 'error' });
+        }
+    });
+
+    socket.on('disconnect', () => console.log('user has left !!'));
 })
 
 
