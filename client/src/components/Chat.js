@@ -14,7 +14,6 @@ const Chat = ({ location }) => {
     const [message, setMessage] = useState('');
     const [messages, setMessages] = useState([]);
     const ENDPOINT = 'localhost:8080';
-
     // manages the join to room event
     useEffect(() => {
 
@@ -24,10 +23,12 @@ const Chat = ({ location }) => {
         setName(name);
         setRoom(room);
 
-        socket.emit('join', { name, room }, ({ error, name }) => {
+        socket.emit('join', { name, room }, ({ error, name, id }) => {
             if (!!error) {
                 alert(error)
-            } else alert(`${name} has joined`);
+            } else {
+                alert(`${name} has joined`);
+            }
         });
 
 
@@ -58,7 +59,7 @@ const Chat = ({ location }) => {
         <div className='outerContainer'>
             <div className='container'>
                 <InfoBar room={room} />
-                <Messages messages={messages} />
+                <Messages messages={messages} name={name} />
                 <Input
                     message={message}
                     setMessage={setMessage}
